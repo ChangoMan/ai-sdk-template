@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Next.js 16 app using Vercel AI SDK for building AI chat interfaces. Supports multiple AI providers (OpenAI, Google) with streaming responses.
+Next.js 16 app using Vercel AI SDK for building AI chat interfaces. Supports multiple AI providers (OpenAI, Google) with streaming responses. Uses shadcn/ui for component library.
 
 ## Development Commands
 
@@ -24,6 +24,17 @@ npm start      # Start production server
 **AI Provider**: Currently configured with OpenAI GPT-4o in the route handler. Provider can be swapped via `@ai-sdk/{provider}` imports (google, openai, etc).
 
 **Path Aliases**: Uses `@/*` for root-level imports (configured in tsconfig.json).
+
+## shadcn/ui
+
+Configured with "new-york" style and CSS variables. Components use Lucide icons.
+
+Add components via: `npx shadcn@latest add [component-name]`
+
+Component aliases:
+- `@/components` - Base components directory
+- `@/components/ui` - shadcn UI components
+- `@/lib/utils` - Utility functions (includes `cn()` for class merging)
 
 ## Environment
 
