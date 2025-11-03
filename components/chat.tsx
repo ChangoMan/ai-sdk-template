@@ -70,14 +70,14 @@ export function Chat() {
       {/* Messages Container */}
       <div
         ref={messagesContainerRef}
-        className="flex-1"
+        className="flex-1 min-h-[calc(100dvh-16rem)]"
         style={{ overflowAnchor: 'none' }}
       >
         <div className="mx-auto flex min-w-0 w-full flex-col gap-4 md:gap-6">
           <div className="flex flex-col gap-4 px-2 py-4 md:gap-6 md:px-4">
             {/* Greeting when no messages */}
             {messages.length === 0 && (
-              <div className="mx-auto mt-4 flex size-full max-w-3xl flex-col justify-center px-4 md:mt-16 md:px-8">
+              <div className="mx-auto mt-4 flex size-full max-w-3xl flex-col justify-center px-4 md:mt-12 md:px-8">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -235,7 +235,7 @@ export function Chat() {
                 }
               }}
               placeholder="Send a message..."
-              className="min-h-[44px] max-h-[200px] grow resize-none border-0 bg-transparent p-2 text-sm outline-none ring-0 [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-scrollbar]:hidden"
+              className="max-h-[200px] grow resize-none border-0 bg-transparent p-2 text-sm outline-none ring-0 [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-scrollbar]:hidden"
               rows={1}
             />
           </div>

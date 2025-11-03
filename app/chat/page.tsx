@@ -3,7 +3,7 @@ import { Container } from '@/components/container'
 
 export default function ChatPage() {
   return (
-    <main className="relative">
+    <main>
       <Container>
         <Chat />
       </Container>
