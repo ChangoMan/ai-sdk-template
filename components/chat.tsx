@@ -1,9 +1,11 @@
 'use client'
 
-import { SparklesIcon } from '@/components/icons'
+import { Response } from '@/components/response'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { useChat } from '@ai-sdk/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowDownIcon } from 'lucide-react'
+import { ArrowDownIcon, ArrowUpIcon, Sparkles } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 export function Chat() {
@@ -11,6 +13,7 @@ export function Chat() {
   const { messages, sendMessage, status } = useChat()
   const messagesContainerRef = useRef<HTMLDivElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isAtBottom, setIsAtBottom] = useState(true)
 
   // Auto-scroll to bottom when new messages arrive
@@ -48,6 +51,18 @@ export function Chat() {
       top: messagesContainerRef.current.scrollHeight,
       behavior: 'smooth',
     })
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (input.trim()) {
+      sendMessage({ text: input })
+      setInput('')
+      // Reset textarea height
+      if (textareaRef.current) {
+        textareaRef.current.style.height = '44px'
+      }
+    }
   }
 
   return (
@@ -99,7 +114,7 @@ export function Chat() {
                   {/* AI Avatar */}
                   {message.role === 'assistant' && (
                     <div className="-mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-border">
-                      <SparklesIcon size={14} />
+                      <Sparkles className="size-3.5" />
                     </div>
                   )}
 
@@ -127,7 +142,11 @@ export function Chat() {
                                 : undefined
                             }
                           >
-                            {part.text}
+                            {message.role === 'assistant' ? (
+                              <Response>{part.text}</Response>
+                            ) : (
+                              part.text
+                            )}
                           </div>
                         )
                       }
@@ -152,7 +171,7 @@ export function Chat() {
                 >
                   <div className="flex items-start justify-start gap-3">
                     <div className="-mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-background ring-1 ring-border">
-                      <SparklesIcon size={14} />
+                      <Sparkles className="size-3.5" />
                     </div>
                     <div className="flex w-full flex-col gap-2 md:gap-4">
                       <div className="p-0 text-muted-foreground text-sm">
@@ -187,19 +206,51 @@ export function Chat() {
       {/* Input Form */}
       <div className="sticky bottom-0 z-1 mx-auto flex w-full gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4">
         <form
-          className="w-full"
-          onSubmit={(e) => {
-            e.preventDefault()
-            sendMessage({ text: input })
-            setInput('')
-          }}
+          className="w-full overflow-hidden rounded-xl border border-border bg-background p-3 shadow-xs transition-all duration-200 hover:border-muted-foreground/50 focus-within:border-border"
+          onSubmit={handleSubmit}
         >
-          <input
-            className="dark:bg-zinc-900 bottom-0 w-full p-2 mb-8 border border-zinc-300 dark:border-zinc-800 rounded shadow-xl"
-            value={input}
-            placeholder="Say something..."
-            onChange={(e) => setInput(e.currentTarget.value)}
-          />
+          <div className="flex flex-row items-start gap-1 sm:gap-2">
+            <Textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  // Don't submit if IME composition is in progress
+                  if (e.nativeEvent.isComposing) {
+                    return
+                  }
+
+                  if (e.shiftKey) {
+                    // Allow newline
+                    return
+                  }
+
+                  // Submit on Enter (without Shift)
+                  e.preventDefault()
+                  const form = e.currentTarget.form
+                  if (form) {
+                    form.requestSubmit()
+                  }
+                }
+              }}
+              placeholder="Send a message..."
+              className="min-h-[44px] max-h-[200px] grow resize-none border-0 bg-transparent p-2 text-sm outline-none ring-0 [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-scrollbar]:hidden"
+              rows={1}
+            />
+          </div>
+          <div className="flex items-center justify-between p-0">
+            <div className="flex items-center gap-0 sm:gap-0.5">
+              {/* Left side tools - empty for now */}
+            </div>
+            <Button
+              type="submit"
+              disabled={!input.trim()}
+              className="size-8 rounded-full bg-primary text-primary-foreground transition-colors duration-200 hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground"
+            >
+              <ArrowUpIcon className="size-3.5" />
+            </Button>
+          </div>
         </form>
       </div>
     </div>

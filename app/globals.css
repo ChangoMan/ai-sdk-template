@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* include utility classes in streamdown */
+@source '../node_modules/streamdown/dist/index.js';
+
+/* include plugins */
+@plugin "@tailwindcss/typography";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
