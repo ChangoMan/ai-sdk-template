@@ -41,7 +41,7 @@ export default function Home() {
           </p>
           <ul className="space-y-2 list-disc pl-4">
             <li>Vercel AI SDK</li>
-            <li>Next.js</li>
+            <li>Next.js 16</li>
             <li>Tailwind CSS</li>
             <li>shadcn/ui</li>
           </ul>

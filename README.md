@@ -2,8 +2,8 @@
 
 Everything you need to build your next AI powered application. Built with:
 
-- Next.js
 - Vercel AI SDK
+- Next.js 16
 - Tailwind CSS
 - shadcn/ui
 
