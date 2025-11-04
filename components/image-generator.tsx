@@ -1,42 +1,42 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+  Dropzone,
+  DropzoneContent,
+  DropzoneEmptyState,
+} from '@/components/ui/shadcn-io/dropzone'
 import { Textarea } from '@/components/ui/textarea'
 import { ImageIcon, Loader2, Sparkles, X } from 'lucide-react'
 import { useState } from 'react'
 
-type Usage = {
-  promptTokens?: number
-  completionTokens?: number
-  totalTokens?: number
+type Result = {
+  text?: string
+  imageUrl?: string
 }
 
 export function ImageGenerator() {
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<{ text: string; usage?: Usage } | null>(
-    null
-  )
+  const [result, setResult] = useState<Result | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [imageFiles, setImageFiles] = useState<File[]>([])
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      setImageFile(file)
+  const handleImageDrop = (files: File[]) => {
+    if (files.length > 0) {
+      setImageFiles(files)
       const reader = new FileReader()
       reader.onloadend = () => {
         setImagePreview(reader.result as string)
       }
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(files[0])
     }
   }
 
   const clearImage = () => {
-    setImageFile(null)
+    setImageFiles([])
     setImagePreview(null)
   }
 
@@ -50,12 +50,12 @@ export function ImageGenerator() {
 
     try {
       let imageBase64 = null
-      if (imageFile) {
+      if (imageFiles.length > 0) {
         const reader = new FileReader()
         imageBase64 = await new Promise<string>((resolve, reject) => {
           reader.onloadend = () => resolve(reader.result as string)
           reader.onerror = reject
-          reader.readAsDataURL(imageFile)
+          reader.readAsDataURL(imageFiles[0])
         })
       }
 
@@ -94,26 +94,29 @@ export function ImageGenerator() {
         <form onSubmit={handleSubmit} className="mt-16 space-y-6">
           {/* Image Upload */}
           <div className="space-y-2">
-            <Label htmlFor="image-upload">Upload Image (optional)</Label>
-            <div className="flex items-center gap-2">
-              <Input
-                id="image-upload"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="flex-1"
-              />
-              {imagePreview && (
+            <div className="flex items-center justify-between">
+              <Label>Upload Image (optional)</Label>
+              {imageFiles.length > 0 && (
                 <Button
                   type="button"
-                  variant="outline"
-                  size="icon"
+                  variant="ghost"
+                  size="sm"
                   onClick={clearImage}
                 >
-                  <X className="size-4" />
+                  <X className="mr-1 size-4" />
+                  Clear
                 </Button>
               )}
             </div>
+            <Dropzone
+              accept={{ 'image/*': [] }}
+              maxFiles={1}
+              onDrop={handleImageDrop}
+              src={imageFiles}
+            >
+              <DropzoneEmptyState />
+              <DropzoneContent />
+            </Dropzone>
             {imagePreview && (
               <div className="relative rounded-lg border overflow-hidden">
                 <img
@@ -137,11 +140,11 @@ export function ImageGenerator() {
             {loading ? (
               <>
                 <Loader2 className="size-4 animate-spin" />
-                {imageFile ? 'Processing...' : 'Generating...'}
+                {imageFiles.length > 0 ? 'Processing...' : 'Generating...'}
               </>
             ) : (
               <>
-                {imageFile ? (
+                {imageFiles.length > 0 ? (
                   <>
                     <ImageIcon className="size-4" />
                     Edit Image
@@ -164,16 +167,25 @@ export function ImageGenerator() {
         )}
 
         {result && (
-          <div className="space-y-4 rounded-lg border bg-card p-4">
-            <div className="space-y-2">
-              <h3 className="font-semibold">Result</h3>
-              <div className="prose prose-sm dark:prose-invert max-w-none">
-                {result.text}
+          <div className="mt-12 space-y-4 rounded-lg border bg-card p-4">
+            {result.imageUrl && (
+              <div className="space-y-2">
+                <h3 className="font-semibold">Generated Image</h3>
+                <div className="relative rounded-lg border overflow-hidden bg-muted">
+                  <img
+                    src={result.imageUrl}
+                    alt="Generated"
+                    className="w-full h-auto"
+                  />
+                </div>
               </div>
-            </div>
-            {result.usage && (
-              <div className="text-xs text-muted-foreground">
-                Tokens: {result.usage.totalTokens}
+            )}
+            {result.text && (
+              <div className="space-y-2">
+                <h3 className="font-semibold">Description</h3>
+                <div className="prose prose-sm dark:prose-invert max-w-none">
+                  {result.text}
+                </div>
               </div>
             )}
           </div>
