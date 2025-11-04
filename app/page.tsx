@@ -9,9 +9,8 @@ export default function Home() {
             Next.js AI Template
           </h1>
           <p className="mt-4 text-foreground text-balance sm:text-lg">
-            A set of beautifully designed components that you can customize,
-            extend, and build on. Start here then make it your own. Open Source.
-            Open Code.
+            Everything you need to build your next AI powered application. Built
+            with Next.js, Vercel AI SDK, and shadcn/ui.
           </p>
         </div>
       </Container>
