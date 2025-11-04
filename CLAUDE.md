@@ -21,9 +21,15 @@ npm start      # Start production server
 
 **Client Component**: `components/chat.tsx` uses `useChat()` hook from `@ai-sdk/react`. Messages have `.parts` array with type-based rendering (currently only 'text' type handled).
 
-**AI Provider**: Currently configured with OpenAI GPT-4o in the route handler. Provider can be swapped via `@ai-sdk/{provider}` imports (google, openai, etc).
+**AI Provider**: Chat uses OpenAI GPT-4o. Image generation uses Google Gemini 2.5 Flash. Providers swappable via `@ai-sdk/{provider}` imports.
 
 **Path Aliases**: Uses `@/*` for root-level imports (configured in tsconfig.json).
+
+**Image Generation**: `app/api/image/route.ts` uses `generateText()` with `google('gemini-2.5-flash-image-preview')` model. Two modes:
+- Text-to-image: Simple prompt input
+- Image editing: Multimodal format with base64 image + prompt
+
+Returns images extracted from `result.files` as base64 data URIs. Client component at `components/image-generator.tsx` uses Dropzone for uploads.
 
 ## shadcn/ui
 
@@ -38,4 +44,6 @@ Component aliases:
 
 ## Environment
 
-Requires `.env.local` with API keys for AI providers (e.g., `OPENAI_API_KEY`).
+Requires `.env.local` with API keys:
+- `OPENAI_API_KEY` - For chat functionality
+- `GOOGLE_GENERATIVE_AI_API_KEY` - For image generation

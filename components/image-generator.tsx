@@ -194,7 +194,7 @@ export function ImageGenerator() {
                 </div>
               )}
             </div>
-            <Button variant="outline" onClick={resetForm} className="w-full">
+            <Button variant="outline" onClick={resetForm}>
               Generate Another Image
             </Button>
           </div>
