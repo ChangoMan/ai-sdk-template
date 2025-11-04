@@ -15,8 +15,25 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Next.js AI Template',
-  description: 'A modern Next.js template with AI chat integration',
+  title: 'AI SDK Template',
+  description: 'Everything you need to build your next AI powered application',
+  metadataBase: new URL('https://aisdk.buildtavern.com'),
+  openGraph: {
+    title: 'AI SDK Template',
+    description:
+      'Everything you need to build your next AI powered application',
+    url: 'https://aisdk.buildtavern.com',
+    siteName: 'AI SDK Template',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AI SDK Template',
+    description:
+      'Everything you need to build your next AI powered application',
+    creator: '@hunterhchang',
+  },
 }
 
 export default function RootLayout({
