@@ -69,13 +69,9 @@ export async function POST(req: Request) {
     console.error('Image generation error:', error)
 
     // Return concise error message (full details in console)
-    const errorMessage = error instanceof Error
-      ? error.message.split('\n')[0]
-      : 'Unknown error'
+    const errorMessage =
+      error instanceof Error ? error.message.split('\n')[0] : 'Unknown error'
 
-    return Response.json(
-      { error: errorMessage },
-      { status: 500 }
-    )
+    return Response.json({ error: errorMessage }, { status: 500 })
   }
 }

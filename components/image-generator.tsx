@@ -91,150 +91,154 @@ export function ImageGenerator() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <div className="text-center">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Image Generation
-        </h1>
-      </div>
-      <div className="max-w-lg mx-auto">
-        {!result && (
-          <>
-            <form onSubmit={handleSubmit} className="mt-12 space-y-6">
-              {/* Image Upload */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="image-upload">Upload Image (optional)</Label>
-                  {imageFiles.length > 0 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      onClick={clearImage}
-                    >
-                      <X className="mr-1 size-4" />
-                      Clear
-                    </Button>
-                  )}
-                </div>
-                <Dropzone
-                  id="image-upload"
-                  accept={{ 'image/*': [] }}
-                  maxFiles={1}
-                  onDrop={handleImageDrop}
-                  src={imageFiles}
-                >
-                  <DropzoneEmptyState />
-                  <DropzoneContent />
-                </Dropzone>
-                {imagePreview && (
-                  <>
-                    <div className="relative rounded-lg border overflow-hidden">
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="w-full h-auto max-h-64 object-contain"
-                      />
-                    </div>
-                    <div className="mb-2 grid grid-cols-2 gap-2">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setPrompt('Add a cool pirate hat')}
-                      >
-                        Add a cool pirate hat
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setPrompt('Give me cat ears')}
-                      >
-                        Give me cat ears
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setPrompt('Put me in outer space')}
-                      >
-                        Put me in outer space
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setPrompt('Add a superhero mask')}
-                      >
-                        Add a superhero mask
-                      </Button>
-                    </div>
-                  </>
+    <div className="max-w-lg mx-auto">
+      <h1 className="text-3xl font-semibold tracking-tight">
+        Image Generation
+      </h1>
+      <p className="mt-4">
+        Note: Image generation uses{' '}
+        <code className="bg-muted px-1.5 py-0.5 rounded text-sm">
+          Gemini 2.5 Flash Image
+        </code>
+        , which may require you to set up billing on your API key.
+      </p>
+
+      {!result && (
+        <>
+          <form onSubmit={handleSubmit} className="mt-12 space-y-6">
+            {/* Image Upload */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="image-upload">Upload Image (optional)</Label>
+                {imageFiles.length > 0 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearImage}
+                  >
+                    <X className="mr-1 size-4" />
+                    Clear
+                  </Button>
                 )}
               </div>
+              <Dropzone
+                id="image-upload"
+                accept={{ 'image/*': [] }}
+                maxFiles={1}
+                onDrop={handleImageDrop}
+                src={imageFiles}
+              >
+                <DropzoneEmptyState />
+                <DropzoneContent />
+              </Dropzone>
+              {imagePreview && (
+                <>
+                  <div className="relative rounded-lg border overflow-hidden">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-auto max-h-64 object-contain"
+                    />
+                  </div>
+                  <div className="mb-2 grid grid-cols-2 gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPrompt('Add a cool pirate hat')}
+                    >
+                      Add a cool pirate hat
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPrompt('Give me cat ears')}
+                    >
+                      Give me cat ears
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPrompt('Put me in outer space')}
+                    >
+                      Put me in outer space
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setPrompt('Add a superhero mask')}
+                    >
+                      Add a superhero mask
+                    </Button>
+                  </div>
+                </>
+              )}
+            </div>
 
-              {/* Prompt Input */}
-              <div>
-                <div className="mt-4">
-                  <Label htmlFor="image-prompt">Describe your image:</Label>
-                  <Textarea
-                    id="image-prompt"
-                    className="mt-3"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Describe what you want to do with the image..."
-                    rows={4}
+            {/* Prompt Input */}
+            <div>
+              <div className="mt-4">
+                <Label htmlFor="image-prompt">Describe your image:</Label>
+                <Textarea
+                  id="image-prompt"
+                  className="mt-3"
+                  value={prompt}
+                  onChange={(e) => setPrompt(e.target.value)}
+                  placeholder="Describe what you want to do with the image..."
+                  rows={4}
+                />
+              </div>
+            </div>
+
+            <Button type="submit" disabled={!prompt.trim() || loading}>
+              {loading ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  {imageFiles.length > 0 ? 'Processing...' : 'Generating...'}
+                </>
+              ) : (
+                <>
+                  <Sparkles className="size-4" />
+                  Generate Image
+                </>
+              )}
+            </Button>
+          </form>
+
+          {error && (
+            <div className="mt-6 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive text-sm">
+              {error}
+            </div>
+          )}
+        </>
+      )}
+
+      {result && (
+        <div className="mt-12 space-y-4">
+          <div className="rounded-lg border bg-card p-4">
+            {result.imageUrl && (
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Generated Image</h3>
+                {result.text && <p>{result.text}</p>}
+                <div className="mt-6 relative rounded-lg border overflow-hidden bg-muted">
+                  <img
+                    src={result.imageUrl}
+                    alt="Generated"
+                    className="w-full h-auto"
                   />
                 </div>
               </div>
-
-              <Button type="submit" disabled={!prompt.trim() || loading}>
-                {loading ? (
-                  <>
-                    <Loader2 className="size-4 animate-spin" />
-                    {imageFiles.length > 0 ? 'Processing...' : 'Generating...'}
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="size-4" />
-                    Generate Image
-                  </>
-                )}
-              </Button>
-            </form>
-
-            {error && (
-              <div className="mt-6 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive text-sm">
-                {error}
-              </div>
             )}
-          </>
-        )}
-
-        {result && (
-          <div className="mt-12 space-y-4">
-            <div className="rounded-lg border bg-card p-4">
-              {result.imageUrl && (
-                <div className="space-y-2">
-                  <h3 className="text-lg font-semibold">Generated Image</h3>
-                  {result.text && <p>{result.text}</p>}
-                  <div className="mt-6 relative rounded-lg border overflow-hidden bg-muted">
-                    <img
-                      src={result.imageUrl}
-                      alt="Generated"
-                      className="w-full h-auto"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-            <Button variant="outline" onClick={resetForm}>
-              Generate Another Image
-            </Button>
           </div>
-        )}
-      </div>
+          <Button variant="outline" onClick={resetForm}>
+            Generate Another Image
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

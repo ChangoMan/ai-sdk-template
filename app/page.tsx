@@ -37,8 +37,14 @@ export default function Home() {
           </h1>
           <p className="max-w-3xl text-foreground text-balance sm:text-lg">
             Everything you need to build your next AI powered application. Built
-            with Next.js, Vercel AI SDK, and shadcn/ui.
+            with:
           </p>
+          <ul className="space-y-2 list-disc pl-4">
+            <li>Vercel AI SDK</li>
+            <li>Next.js</li>
+            <li>Tailwind CSS</li>
+            <li>shadcn/ui</li>
+          </ul>
           <div className="mt-6 flex gap-4">
             <Button asChild>
               <Link href="/chat">See Examples</Link>

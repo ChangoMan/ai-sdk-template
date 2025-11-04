@@ -44,5 +44,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# examples
-ai-chatbot-example/
+# ai
+/.claude
