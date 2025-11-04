@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dropzone'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { ImageIcon, Loader2, Sparkles, X } from 'lucide-react'
+import { Loader2, Sparkles, X } from 'lucide-react'
 import { useCallback, useState } from 'react'
 
 type Result = {
@@ -100,11 +100,11 @@ export function ImageGenerator() {
       <div className="max-w-lg mx-auto">
         {!result && (
           <>
-            <form onSubmit={handleSubmit} className="mt-16 space-y-6">
+            <form onSubmit={handleSubmit} className="mt-12 space-y-6">
               {/* Image Upload */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label>Upload Image (optional)</Label>
+                  <Label htmlFor="image-upload">Upload Image (optional)</Label>
                   {imageFiles.length > 0 && (
                     <Button
                       type="button"
@@ -118,6 +118,7 @@ export function ImageGenerator() {
                   )}
                 </div>
                 <Dropzone
+                  id="image-upload"
                   accept={{ 'image/*': [] }}
                   maxFiles={1}
                   onDrop={handleImageDrop}
@@ -127,23 +128,66 @@ export function ImageGenerator() {
                   <DropzoneContent />
                 </Dropzone>
                 {imagePreview && (
-                  <div className="relative rounded-lg border overflow-hidden">
-                    <img
-                      src={imagePreview}
-                      alt="Preview"
-                      className="w-full h-auto max-h-64 object-contain"
-                    />
-                  </div>
+                  <>
+                    <div className="relative rounded-lg border overflow-hidden">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-auto max-h-64 object-contain"
+                      />
+                    </div>
+                    <div className="mb-2 grid grid-cols-2 gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPrompt('Add a cool pirate hat')}
+                      >
+                        Add a cool pirate hat
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPrompt('Give me cat ears')}
+                      >
+                        Give me cat ears
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPrompt('Put me in outer space')}
+                      >
+                        Put me in outer space
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setPrompt('Add a superhero mask')}
+                      >
+                        Add a superhero mask
+                      </Button>
+                    </div>
+                  </>
                 )}
               </div>
 
               {/* Prompt Input */}
-              <Textarea
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Describe what you want to do with the image..."
-                rows={4}
-              />
+              <div>
+                <div className="mt-4">
+                  <Label htmlFor="image-prompt">Describe your image:</Label>
+                  <Textarea
+                    id="image-prompt"
+                    className="mt-3"
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="Describe what you want to do with the image..."
+                    rows={4}
+                  />
+                </div>
+              </div>
 
               <Button type="submit" disabled={!prompt.trim() || loading}>
                 {loading ? (
@@ -153,17 +197,8 @@ export function ImageGenerator() {
                   </>
                 ) : (
                   <>
-                    {imageFiles.length > 0 ? (
-                      <>
-                        <ImageIcon className="size-4" />
-                        Edit Image
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="size-4" />
-                        Generate Image
-                      </>
-                    )}
+                    <Sparkles className="size-4" />
+                    Generate Image
                   </>
                 )}
               </Button>
@@ -178,7 +213,7 @@ export function ImageGenerator() {
         )}
 
         {result && (
-          <div className="mt-16 space-y-4">
+          <div className="mt-12 space-y-4">
             <div className="rounded-lg border bg-card p-4">
               {result.imageUrl && (
                 <div className="space-y-2">

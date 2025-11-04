@@ -3,7 +3,7 @@ import { ImageGenerator } from '@/components/image-generator'
 
 export default function ImagePage() {
   return (
-    <main className="my-12">
+    <main className="mt-6 mb-24">
       <Container>
         <ImageGenerator />
       </Container>
